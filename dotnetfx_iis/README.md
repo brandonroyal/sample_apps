@@ -37,7 +37,7 @@ $ wget https://github.com/BrandonRoyal/sample_apps/blob/master/dotnetfx_iis/dock
 $ docker stack deploy -c docker-compose.yml teststack
 ```
 
-# Configuration #3: Multiple Services (Http Routing Mesh Networking)
+## Configuration #3: Multiple Services (Http Routing Mesh Networking)
 
 1) Create `ucp-hrm` network from manager node (required to override default encyption which currently isn't supported on Windows)
 ```
@@ -63,3 +63,11 @@ Change `app.example.com` to fully qualified hostname that resolve to the node(s)
 ```
 $ docker stack deploy -c docker-compose.yml teststack
 ```
+
+## Credits
+
+Many configurations and practices in this app are the result of the hard work of [Elton Stoneman](https://github.com/sixeyed) and [Michael Friis](https://github.com/friism).
+* [Relay IIS Log Entries](https://blog.sixeyed.com/relay-iis-log-entries-to-read-them-in-docker/)
+* Disabling Windows Server DNS
+* Translating process to machine environment variables
+* Others I can't remember a the moment...
