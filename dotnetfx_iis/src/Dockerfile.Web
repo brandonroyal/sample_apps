@@ -1,0 +1,34 @@
+﻿# escape=`
+
+# build agent
+FROM sixeyed/msbuild:4.5.2-webdeploy
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+COPY SampleFxApp.sln C:\src\SampleFxApp.sln
+COPY ./Web C:\src\Web
+RUN $nuGetPath = 'C:\Chocolatey\bin\nuget.bat'; `
+    $msBuildPath = 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'; `
+    & $nuGetPath restore 'C:\src\SampleFxApp.sln'; `
+    & $msBuildPath 'C:\src\Web\Web.csproj' /p:OutputPath=c:\out /p:DeployOnBuild=true /p:Configuration=Release /p:VSToolsPath=C:\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\tools\VSToolsPath
+
+# app image
+FROM microsoft/aspnet:windowsservercore-10.0.14393.693
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+# disable DNS cache
+RUN Set-ItemProperty -path 'HKLM:\SYSTEM\CurrentControlSet\Services\Dnscache\Parameters' -Name ServerPriorityTimeLimit -Value 0 -Type DWord
+
+# remove default site and add new site
+RUN Remove-Website 'Default Web Site'; `
+    New-Website -Name 'App' -PhysicalPath "C:\websites\app" -Port 80 -Force; `
+    Add-WindowsFeature Web-Windows-Auth;
+
+# modify IIS logging (https://blog.sixeyed.com/relay-iis-log-entries-to-read-them-in-docker/)
+RUN Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log' -name 'centralLogFileMode' -value 'CentralW3C'; `  
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'truncateSize' -value 4294967295; `
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'period' -value 'MaxSize'; `
+    Set-WebConfigurationProperty -pspath 'MACHINE/WEBROOT/APPHOST' -filter 'system.applicationHost/log/centralW3CLogFile' -name 'directory' -value 'c:\iislog'
+
+COPY --from=0 C:\out\_PublishedWebsites\Web C:\websites\app
+COPY ./bootstrap.ps1 C:\bootstrap.ps1
+
+ENTRYPOINT ["powershell", "C:\\bootstrap.ps1"]

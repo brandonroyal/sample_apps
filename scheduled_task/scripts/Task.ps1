@@ -1,0 +1,1 @@
+New-Item c:\success.txt -type file

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "src\App.csproj", "{F5500350-B7D2-4B4E-943F-4B434450F87F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CECE8944-473A-4DC8-9B90-A2D33FBE1CBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D89977C8-1300-45B9-9BAF-99762A67EA94}"
+	ProjectSection(SolutionItems) = preProject
+		src\bin\Release\App.exe = src\bin\Release\App.exe
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{1C8F22D5-9CEB-4360-898C-21A0CD6D7C52}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F5500350-B7D2-4B4E-943F-4B434450F87F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5500350-B7D2-4B4E-943F-4B434450F87F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5500350-B7D2-4B4E-943F-4B434450F87F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5500350-B7D2-4B4E-943F-4B434450F87F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F5500350-B7D2-4B4E-943F-4B434450F87F} = {CECE8944-473A-4DC8-9B90-A2D33FBE1CBA}
+	EndGlobalSection
+EndGlobal

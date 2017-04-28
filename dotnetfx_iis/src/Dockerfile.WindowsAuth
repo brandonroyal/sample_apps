@@ -1,0 +1,10 @@
+# escape=`
+
+FROM broyal/samplefxapp-web:1.0
+
+# enable windows authentication
+RUN Add-WindowsFeature Web-Windows-Auth; `
+    C:\Windows\system32\inetsrv\appcmd unlock config /section:anonymousAuthentication; `
+    C:\Windows\system32\inetsrv\appcmd unlock config -section:windowsAuthentication; `
+    Set-WebConfigurationProperty -filter /system.webServer/security/authentication/windowsAuthentication -name enabled -value true -PSPath IIS:\Sites\App; `
+    Set-WebConfigurationProperty -filter /system.webServer/security/authentication/anonymousAuthentication -name enabled -value false -PSPath IIS:\Sites\App;
