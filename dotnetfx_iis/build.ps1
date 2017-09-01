@@ -1,4 +1,4 @@
-$tag = "1.0"
+$tag = "1.1"
 
 Write-Host "building Web Image"
 docker build -f ./src/Dockerfile.Web -t broyal/samplefxapp-web:$tag ./src/

@@ -1,14 +1,14 @@
 ﻿# escape=`
 
 # build agent
-FROM sixeyed/msbuild:4.5.2-webdeploy
-SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
-COPY SampleFxApp.sln C:\src\SampleFxApp.sln
-COPY ./Web C:\src\Web
-RUN $nuGetPath = 'C:\Chocolatey\bin\nuget.bat'; `
-    $msBuildPath = 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe'; `
-    & $nuGetPath restore 'C:\src\SampleFxApp.sln'; `
-    & $msBuildPath 'C:\src\Web\Web.csproj' /p:OutputPath=c:\out /p:DeployOnBuild=true /p:Configuration=Release /p:VSToolsPath=C:\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\tools\VSToolsPath
+FROM sixeyed/msbuild:netfx-4.5.2-webdeploy-10.0.14393.1198 AS builder
+WORKDIR C:\src
+COPY Web\packages.config .
+RUN nuget restore packages.config -PackagesDirectory ..\packages
+
+COPY Web C:\src
+RUN msbuild Web.csproj /p:OutputPath=c:\out `
+        /p:DeployOnBuild=true /p:VSToolsPath=C:\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\tools\VSToolsPath
 
 # app image
 FROM microsoft/aspnet:windowsservercore-10.0.14393.693

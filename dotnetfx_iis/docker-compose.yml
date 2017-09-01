@@ -2,34 +2,21 @@ version: "3.2"
 
 services:
   web:
-    image: broyal/samplefxapp-web:1.0
+    image: broyal/samplefxapp-web:1.1
     environment:
       - API_HOSTNAME=api
-    deploy:
-      mode: replicated
-      replicas: 2
-      endpoint_mode: dnsrr
-      placement:
-          constraints: [node.platform.os == windows]
     ports:
-      - mode: host
-        target: 80
-        published: 80
+      - 80:80
     networks:
-      - web
+      - nat
     depends_on:
       - api
   api:
-    image: broyal/samplefxapp-api:1.0
-    deploy:
-      mode: replicated
-      replicas: 2
-      endpoint_mode: dnsrr
-      placement:
-          constraints: [node.platform.os == windows]
+    image: broyal/samplefxapp-api:1.1
     networks:
-      - web
+      - nat
 
 networks:
-  web:
-    driver: overlay
+  nat:
+    external:
+      name: nat
